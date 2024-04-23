@@ -7,7 +7,7 @@ class InvalidSnackException extends Exception {
 abstract class Snack {
     protected String snackID;
     protected String name;
-    protected int basePrice;    // in pence
+    protected int basePrice;    // In pence
 
     // Constructor
     public Snack (String snackID, String name, int basePrice) throws InvalidSnackException {
@@ -20,21 +20,15 @@ abstract class Snack {
     }
 
     // Accessor Methods
-    public String getSnackID() {
-        return snackID;
-    }
-    public String getName() {
-        return name;
-    }
-    public int getBasePrice() {
-        return basePrice;
-    }
-
-    abstract int calculatePrice();
+    public String getSnackID() { return snackID; }
+    public String getName() { return name; }
+    public int getBasePrice() { return basePrice; }
 
     private boolean isValidSnackID(String snackID) {
         return snackID.matches("[A-Za-z]/\\d{7}");
     }
+
+    abstract int calculatePrice();
 
     public String toString() {
         return "Snack ID: " + snackID + "\nName: " + name + "\nBase Price: " + basePrice + "p";
@@ -44,7 +38,7 @@ abstract class Snack {
 
 class Food extends Snack {
     private boolean isHot;
-    public static final double hotFoodSurchargePercentage = 0.10;
+    private static final double hotFoodSurchargePercentage = 0.10;
 
     // Constructor
     public Food (String snackID, String name, int basePrice, boolean isHot) throws InvalidSnackException {
@@ -54,23 +48,19 @@ class Food extends Snack {
         }
         this.isHot = isHot;
     }
-
     public boolean getIsHot() {
         return isHot;
     }
 
     @Override
     public int calculatePrice() {
-        double basePrice1 = basePrice;
-
+        double unroundedBasePrice = basePrice;
         if (isHot) {
-            basePrice1 += basePrice1 * hotFoodSurchargePercentage;
+            unroundedBasePrice += unroundedBasePrice * hotFoodSurchargePercentage;
         }
-
-        int price = (int) Math.ceil(basePrice1);
+        int price = (int) Math.ceil(unroundedBasePrice);
         return price;
     }
-
     public String toString() {
         return super.toString() + "\nIs Hot: " + isHot;
     }
@@ -78,23 +68,21 @@ class Food extends Snack {
 
 
 class Drink extends Snack {
-    public enum sugarLevel {
+    public enum sugarLevels {
         HIGH,
         LOW,
         NONE
     }
+    private sugarLevels sugarLevel;
 
-    private sugarLevel sugarLevel;
-
-    public Drink (String snackID, String name, int basePrice, sugarLevel sugarLevel) throws InvalidSnackException {
+    public Drink (String snackID, String name, int basePrice, sugarLevels sugarLevel) throws InvalidSnackException {
         super(snackID, name, basePrice);
         if (snackID.charAt(0) != 'D') {
             throw new InvalidSnackException("SnackID for drink does not start with 'D'");
         }
         this.sugarLevel= sugarLevel;
     }
-
-    public sugarLevel getSugarLevel() {
+    public sugarLevels getSugarLevel() {
         return sugarLevel;
     }
 
