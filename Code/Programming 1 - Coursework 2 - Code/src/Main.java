@@ -13,53 +13,73 @@ public class Main {
         String snackID = myFood.nextLine();  // Read user input
 
         try {
-            File file = new File("Snacks.txt");
+            File file = new File("/Users/julest/Desktop/Files/snacks.txt");
             Scanner fileScanner = new Scanner(file);
 
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 String[] parts = line.split("@");
-                String idFromText = parts[0]; // Extract snack ID from text
+                String newID = parts[0]; // Extract snack ID from text
 
-                if (snackID.equals(idFromText)) {
+                if (snackID.equals(newID)) {
                     // Extract other details from text
-                    String name = parts[1];
-                    int basePrice = Integer.parseInt(parts[3]);
+                    String newName = parts[1];
+                    int newBasePrice = Integer.parseInt(parts[3]);
 
                     // Determine if it's a food or drink based on ID
                     boolean isHot = parts[2].equals("hot"); // For food
-                    String sugarContent = parts[2]; // For drink
+                    String sugarLevels = parts[2]; // For drink
 
                     // Create Food or Drink object accordingly
-                    if (idFromText.startsWith("F")) {
-                        Food food = new Food(idFromText, name, basePrice, isHot);
-                        System.out.println("Created Food object:\n" + food);
-                    } else if (idFromText.startsWith("D")) {
-                        Drink.sugarLevels content;
-                        switch (sugarContent) {
-                            case "high":
-                                content = Drink.sugarLevels.HIGH;
-                                break;
-                            case "low":
-                                content = Drink.sugarLevels.LOW;
-                                break;
-                            default:
-                                content = Drink.sugarLevels.NONE;
-                                break;
-                        }
-                        Drink drink = new Drink(idFromText, name, basePrice, content);
-                        System.out.println("Created Drink object:\n" + drink);
+                    if (newID.startsWith("F")) {
+                        Food food = new Food(newID, newName, newBasePrice, isHot);
+
+                        System.out.println("Food Details:");
+                        System.out.println(food);
+                        System.out.println("Calculated Price: " + food.calculatePrice() + "p");
+                    } else if (newID.startsWith("D")) {
+                        Drink.sugarLevels newSugarLevel = switch (sugarLevels) {
+                            case "high" -> Drink.sugarLevels.HIGH;
+                            case "low" -> Drink.sugarLevels.LOW;
+                            default -> Drink.sugarLevels.NONE;
+                        };
+                        Drink drink = new Drink(newID, newName, newBasePrice, newSugarLevel);
+
+                        System.out.println("\nDrink Details:");
+                        System.out.println(drink);
+                        System.out.println("Calculated Price: " + drink.calculatePrice() + "p");
                     }
 
-                    // Exit loop after finding the match
-                    break;
                 }
             }
 
             fileScanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred while reading the file: " + e.getMessage());
+            System.out.println(e.getMessage());
         } catch (InvalidSnackException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            File file = new File("/Users/julest/Desktop/Files/customers.txt");
+            Scanner fileScanner = new Scanner(file);
+
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split("@");
+                String newID = parts[0]; // Extract snack ID from text
+
+                if (snackID.equals(newID)) {
+                    // Extract other details from text
+                    String newName = parts[1];
+                    int newBasePrice = Integer.parseInt(parts[3]);
+
+                    // Determine if it's a food or drink based on ID
+                    boolean isHot = parts[2].equals("hot"); // For food
+                    String sugarLevels = parts[2]; // For drink
+                }
+            }
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
