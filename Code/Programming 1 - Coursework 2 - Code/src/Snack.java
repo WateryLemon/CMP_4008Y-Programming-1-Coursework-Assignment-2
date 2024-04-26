@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 class InvalidSnackException extends Exception {
     public InvalidSnackException(String message) {
         super(message);
@@ -24,8 +28,27 @@ abstract class Snack {
     public String getName() { return name; }
     public int getBasePrice() { return basePrice; }
 
-    private boolean isValidSnackID(String snackID) {
-        return snackID.matches("[A-Za-z]/\\d{7}");
+    public boolean isValidSnackID(String snackID) {
+
+        try {
+            File file = new File("/Users/julest/Desktop/Files/snacks.txt");
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split("@");
+                String id = parts[0];
+                if (id.equals(snackID)) {
+                    scanner.close();
+                    return true;
+                }
+            }
+
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: File not found - " + e.getMessage());
+        }
+        return false;
     }
 
     abstract int calculatePrice();
@@ -43,7 +66,7 @@ class Food extends Snack {
     // Constructor
     public Food (String snackID, String name, int basePrice, boolean isHot) throws InvalidSnackException {
         super(snackID, name, basePrice);
-        if (snackID.charAt(0) != 'F') {
+        if (snackID.charAt(0) != 'F' || !isValidSnackID(snackID)) {
             throw new InvalidSnackException("SnackID for food does not start with 'F'");
         }
         this.isHot = isHot;
@@ -77,7 +100,7 @@ class Drink extends Snack {
 
     public Drink (String snackID, String name, int basePrice, sugarLevels sugarLevel) throws InvalidSnackException {
         super(snackID, name, basePrice);
-        if (snackID.charAt(0) != 'D') {
+        if (snackID.charAt(0) != 'D' || !isValidSnackID(snackID)) {
             throw new InvalidSnackException("SnackID for drink does not start with 'D'");
         }
         this.sugarLevel= sugarLevel;

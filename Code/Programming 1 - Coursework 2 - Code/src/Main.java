@@ -7,79 +7,21 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Creating instances of Food and Drink
-        Scanner myFood = new Scanner(System.in);
-        System.out.println("Enter Snack ID");
-        String snackID = myFood.nextLine();  // Read user input
 
         try {
-            File file = new File("/Users/julest/Desktop/Files/snacks.txt");
-            Scanner fileScanner = new Scanner(file);
+            // Creating instances of Staff and Student
+            Customer staff = new StaffCustomer("58R526", "John-Paul Clay", 400, StaffCustomer.schools.OTHER);
+            Customer student = new StudentCustomer("901420", "Paige Barclay", -100);
 
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                String[] parts = line.split("@");
-                String newID = parts[0]; // Extract snack ID from text
+            // Displaying details and calculated price
+            System.out.println("Staff Details:");
+            System.out.println(staff);
+            System.out.println("Calculated balance (-£2.50): " + staff.chargeAccount(250) + "p");
 
-                if (snackID.equals(newID)) {
-                    // Extract other details from text
-                    String newName = parts[1];
-                    int newBasePrice = Integer.parseInt(parts[3]);
-
-                    // Determine if it's a food or drink based on ID
-                    boolean isHot = parts[2].equals("hot"); // For food
-                    String sugarLevels = parts[2]; // For drink
-
-                    // Create Food or Drink object accordingly
-                    if (newID.startsWith("F")) {
-                        Food food = new Food(newID, newName, newBasePrice, isHot);
-
-                        System.out.println("Food Details:");
-                        System.out.println(food);
-                        System.out.println("Calculated Price: " + food.calculatePrice() + "p");
-                    } else if (newID.startsWith("D")) {
-                        Drink.sugarLevels newSugarLevel = switch (sugarLevels) {
-                            case "high" -> Drink.sugarLevels.HIGH;
-                            case "low" -> Drink.sugarLevels.LOW;
-                            default -> Drink.sugarLevels.NONE;
-                        };
-                        Drink drink = new Drink(newID, newName, newBasePrice, newSugarLevel);
-
-                        System.out.println("\nDrink Details:");
-                        System.out.println(drink);
-                        System.out.println("Calculated Price: " + drink.calculatePrice() + "p");
-                    }
-
-                }
-            }
-
-            fileScanner.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (InvalidSnackException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            File file = new File("/Users/julest/Desktop/Files/customers.txt");
-            Scanner fileScanner = new Scanner(file);
-
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                String[] parts = line.split("@");
-                String newID = parts[0]; // Extract snack ID from text
-
-                if (snackID.equals(newID)) {
-                    // Extract other details from text
-                    String newName = parts[1];
-                    int newBasePrice = Integer.parseInt(parts[3]);
-
-                    // Determine if it's a food or drink based on ID
-                    boolean isHot = parts[2].equals("hot"); // For food
-                    String sugarLevels = parts[2]; // For drink
-                }
-            }
-        } catch (FileNotFoundException e) {
+            System.out.println("\nStudent Details:");
+            System.out.println(student);
+            System.out.println("Calculated balance: " + student.chargeAccount((250)) + "p");
+        } catch (InsufficientBalanceException e) {
             throw new RuntimeException(e);
         }
     }
