@@ -29,22 +29,15 @@ abstract class Snack {
     public int getBasePrice() { return basePrice; }
 
     public boolean isValidSnackID(String snackID) {
-
-        try {
-            File file = new File("/Users/julest/Desktop/Files/snacks.txt");
-            Scanner scanner = new Scanner(file);
-
+        try (Scanner scanner = new Scanner(new File("/Users/julest/Desktop/Files/snacks.txt"))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split("@");
                 String id = parts[0];
                 if (id.equals(snackID)) {
-                    scanner.close();
                     return true;
                 }
             }
-
-            scanner.close();
         } catch (FileNotFoundException e) {
             System.err.println("Error: File not found - " + e.getMessage());
         }
