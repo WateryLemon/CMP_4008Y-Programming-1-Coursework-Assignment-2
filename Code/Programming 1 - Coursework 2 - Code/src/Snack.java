@@ -53,7 +53,7 @@ abstract class Snack {
 
 
 class Food extends Snack {
-    private boolean isHot;
+    private final boolean isHot;
     private static final double hotFoodSurchargePercentage = 0.10;
 
     // Constructor
@@ -74,11 +74,10 @@ class Food extends Snack {
         if (isHot) {
             unroundedBasePrice += unroundedBasePrice * hotFoodSurchargePercentage;
         }
-        int price = (int) Math.ceil(unroundedBasePrice);
-        return price;
+        return (int) Math.ceil(unroundedBasePrice);
     }
     public String toString() {
-        return super.toString() + "\nIs Hot: " + isHot;
+        return "Food\n" + super.toString() + "\nIs Hot: " + isHot;
     }
 }
 
@@ -89,7 +88,7 @@ class Drink extends Snack {
         LOW,
         NONE
     }
-    private sugarLevels sugarLevel;
+    private final sugarLevels sugarLevel;
 
     public Drink (String snackID, String name, int basePrice, sugarLevels sugarLevel) throws InvalidSnackException {
         super(snackID, name, basePrice);
@@ -104,22 +103,21 @@ class Drink extends Snack {
 
     @Override
     public int calculatePrice() {
-        int price = basePrice;
+        int priceAfterTax = basePrice;
         switch (sugarLevel) {
             case HIGH:
-                price += 24;
+                priceAfterTax += 24;
                 break;
             case LOW:
-                price += 18;
+                priceAfterTax += 18;
                 break;
             case NONE:
-                price += 0;
                 break;
         }
-        return price;
+        return priceAfterTax;
     }
 
     public String toString() {
-        return super.toString() + "\nSugar Level: " + sugarLevel;
+        return "Drink\n" + super.toString() + "\nSugar Level: " + sugarLevel;
     }
 }

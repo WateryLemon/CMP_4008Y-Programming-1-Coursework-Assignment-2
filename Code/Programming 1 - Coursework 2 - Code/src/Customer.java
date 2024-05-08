@@ -54,12 +54,13 @@ public class Customer {
 
     // Constructor balance
     public Customer (String accountID, String name, int balance) throws InsufficientBalanceException {
-        if (balance < 0 && type == "STAFF") {
+        if ((balance < 0 && type == "STAFF") | (balance < -500 && type == "STUDENT")) {
             throw new InsufficientBalanceException("Invalid account ID or negative balance.");
-        } else if (balance < 500 && type == "STUDENT")
-        this.accountID = accountID;
-        this.name = name;
-        this.balance = balance;
+        } else {
+            this.accountID = accountID;
+            this.name = name;
+            this.balance = balance;
+        }
     }
 
     public String getAccountID() { return accountID; }
@@ -87,7 +88,7 @@ class StudentCustomer extends Customer {
     // Constructor
     public StudentCustomer(String accountID, String name, String type) throws InvalidCustomerException {
         super(accountID, name, type);
-}
+    }
     public StudentCustomer(String accountID, String name, int balance) throws InsufficientBalanceException {
         super(accountID, name, balance);
     }
