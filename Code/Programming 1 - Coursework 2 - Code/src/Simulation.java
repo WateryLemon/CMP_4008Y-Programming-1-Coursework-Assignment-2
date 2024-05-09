@@ -26,9 +26,10 @@ public class Simulation {
                     } else {
                         throw new InvalidSnackException("Invalid snack ID format");
                     }
-                    shop.addSnack(snack);
 
-//                    System.out.println("Snack added to shop: " + name);
+                    shop.addSnack(snack);
+                    System.out.println("Snack added to shop: " + name);
+
                 } catch (InvalidSnackException e) {
                     System.err.println("Error: Invalid snack - " + e.getMessage());
                 }
@@ -43,7 +44,6 @@ public class Simulation {
                 String line = scanner.nextLine();
                 String[] parts = line.split("#");
                 String accountID = parts[0];
-                System.out.println(accountID);
                 String name = parts[1];
                 int balance = Integer.parseInt(parts[2]);
 
@@ -70,7 +70,7 @@ public class Simulation {
                     }
                     shop.addCustomer(customer);
 
-//                    System.out.println("Customer added to shop: " + name);
+                    System.out.println("Customer added to shop: " + name);
                 } catch (InvalidCustomerException e) {
                     System.err.println("Error: Invalid customer - " + e.getMessage());
                 }
@@ -95,6 +95,20 @@ public class Simulation {
                         case "NEW_CUSTOMER":
                             String newName = parts[2].trim();
                             String type = parts[3].trim();
+
+                            // Check if the customer ID already exists
+                            boolean isDuplicate = false;
+                            for (Customer existingCustomer : shop.customers) {
+                                if (existingCustomer.getAccountID().equals(accountID)) {
+                                    isDuplicate = true;
+                                    break;
+                                }
+                            }
+
+                            if (isDuplicate) {
+                                System.err.println("Error: Customer ID " + accountID + " already exists.");
+                                break; // Exit the switch statement
+                            }
 
                             Customer newCustomer;
 
