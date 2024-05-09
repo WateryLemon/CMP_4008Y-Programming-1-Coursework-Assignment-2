@@ -28,20 +28,22 @@ abstract class Snack {
     public String getName() { return name; }
     public int getBasePrice() { return basePrice; }
 
-    public boolean isValidSnackID(String snackID) {
-        try (Scanner scanner = new Scanner(new File("snacks.txt"))) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] parts = line.split("@");
-                String id = parts[0];
-                if (id.equals(snackID)) {
-                    return true;
-                }
+    boolean isValidSnackID(String snackString) {
+        String[] parts = snackString.split("@");
+        if (parts.length < 1)  { return false; }
+
+        String snackID = parts[0];
+        if (snackID.length() != 9) { return false; }
+
+        char type = snackID.charAt(0);
+        if (type != 'F' && type != 'D' && snackID.charAt(1) != '/') {return false; }
+
+        for (int i = 2; i < snackID.length(); i++) {
+            if (!Character.isDigit(snackID.charAt(i))) {
+                return false;
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("Error: File not found - " + e.getMessage());
         }
-        return false;
+        return true;
     }
 
     abstract int calculatePrice();
