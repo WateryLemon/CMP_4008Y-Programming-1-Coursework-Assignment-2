@@ -71,7 +71,7 @@ public class Simulation {
                     shop.addCustomer(customer);
 
 //                    System.out.println("Customer added to shop: " + name);
-                } catch (InvalidCustomerException | InsufficientBalanceException e) {
+                } catch (InvalidCustomerException e) {
                     System.err.println("Error: Invalid customer - " + e.getMessage());
                 }
             }

@@ -78,6 +78,8 @@ class SnackShop {
         for (Customer customer : customers) {
             balances.add(customer.getBalance());
         }
+
+        System.out.println(balances);
         System.out.println("Number of balances: " + balances.size());
 
         balances.sort(null);
