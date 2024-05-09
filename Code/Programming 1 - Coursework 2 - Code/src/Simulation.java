@@ -180,9 +180,9 @@ public class Simulation {
 
     public static void main(String[] args) {
         // Define file paths
-        File snackFile = new File("/Users/julest/Desktop/Files/snacks.txt");
-        File customerFile = new File("/Users/julest/Desktop/Files/customers.txt");
-        File transactionFile = new File("/Users/julest/Desktop/Files/transactions.txt");
+        File snackFile = new File("snacks.txt");
+        File customerFile = new File("customers.txt");
+        File transactionFile = new File("transactions.txt");
 
         // Initialise the shop
         SnackShop shop = initialiseShop("MySnackShop", snackFile, customerFile);

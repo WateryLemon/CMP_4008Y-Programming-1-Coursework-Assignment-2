@@ -29,7 +29,7 @@ abstract class Snack {
     public int getBasePrice() { return basePrice; }
 
     public boolean isValidSnackID(String snackID) {
-        try (Scanner scanner = new Scanner(new File("/Users/julest/Desktop/Files/snacks.txt"))) {
+        try (Scanner scanner = new Scanner(new File("snacks.txt"))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split("@");
